@@ -21,6 +21,8 @@ class CPUMetric:
 
     @classmethod
     def load_from_string(cls, str_value: str):
+        '''Return a CPUMetric instance
+        '''
         value = json.loads(str_value)
         return cls(**value)
 
@@ -84,6 +86,8 @@ class MemMetric:
 
     @classmethod
     def load_from_string(cls, str_value: str):
+        '''Return a MemMetric instance
+        '''
         value = json.loads(str_value)
         return cls(**value)
 
@@ -148,6 +152,8 @@ class DiskMetric:
 
     @classmethod
     def load_from_string(cls, str_value: str):
+        '''Return a DiskMetric instance
+        '''
         value = json.loads(str_value)
         return cls(**value)
 
@@ -201,12 +207,9 @@ class DiskMetric:
 
 class SystemMonitor:
     def __init__(self, machine_id):
+        '''Init a system monitor instance
+        '''
         self.machine_id = machine_id
-        self.message = 'abcd'
-
-    def produce(self):
-        # self.producer.send_message(message)
-        print('Enter produce function')
 
     def get_cpu_percent(self) -> CPUMetric:
         cpu = psutil.cpu_times_percent()

@@ -18,7 +18,6 @@ def monitor(c, prod=True):
 
     The process will get the system all kinds of metric data and publish them into kafka
     '''
-    print('prod is ', prod)
     if prod:
         load_dotenv()
 
@@ -43,11 +42,6 @@ def initdb(c, prod=True):
         load_dotenv()
 
     init_tables()
-
-
-@task
-def local(c):
-    app.app.monitor_local()
 
 
 # ## uncomment this code to debug

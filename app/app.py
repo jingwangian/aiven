@@ -15,6 +15,8 @@ logger = logging.getLogger(__name__)
 
 
 def start_monitor():
+    '''start the monitor process
+    '''
     logger.info('Enter start_monitor')
     environment = Environment()
 
@@ -46,6 +48,8 @@ def start_monitor():
 
 
 def start_etl():
+    '''start the etl process
+    '''
     logger.info('Enter start_etl function')
     connection = db.dbc.connection
 

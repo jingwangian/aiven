@@ -14,11 +14,15 @@ class ProducerError(Exception):
 
 
 class Producer:
-    def __init__(self, topic_name):
+    def __init__(self, topic_name: str):
+        '''Init a producer instance
+        '''
         self.topic_name = topic_name
         self.producer = None
 
     def connect(self):
+        '''Connect to Kafka service
+        '''
         environment = Environment()
 
         logger.info('environment = %s', environment)
@@ -39,7 +43,9 @@ class Producer:
             self.producer = None
             raise ProducerError('Failed to connect to kafka')
 
-    def publish_message(self, key, value):
+    def publish_message(self, key: str, value: str):
+        '''Publish the message to kafka
+        '''
         producer_instance = self.producer
         try:
             key_bytes = bytes(key, encoding='utf-8')
@@ -55,6 +61,8 @@ class Producer:
 class Consumer:
     @classmethod
     def get_consumer(cls):
+        '''Generate a consumer instance
+        '''
         environment = Environment()
         host_addr = f'{environment.KAFKA_HOST}:{environment.KAFKA_PORT}'
         consumer = KafkaConsumer(environment.KAFKA_TOPIC,

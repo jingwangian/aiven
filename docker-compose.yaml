@@ -1,0 +1,73 @@
+version: "3.5"
+services:
+  monitor:
+    image: aiven/aiven
+    volumes:
+      - .:/opt/aiven
+    environment:
+      # - KAFKA_HOST=kafka
+      # - KAFKA_PORT=9092
+      - name=db
+    command: invoke monitor
+    networks: 
+      - aiven_platform_default
+  etl:
+    image: aiven/aiven
+    volumes:
+      - .:/opt/aiven
+    environment:
+      # - KAFKA_HOST=kafka
+      # - KAFKA_PORT=9092
+      # - PGDB_HOST=pg-db
+      - name=db
+    command: invoke etl
+    networks: 
+      - aiven_platform_default
+  # postgresql Database
+  pg-db:
+    image: postgres:11.6-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - ./volume/postgresql/data:/var/lib/postgresql/data
+      - ./volume/postgresql/tmp:/tmp
+      - ./scripts:/var/lib/postgresql/scripts
+    environment:
+      - POSTGRES_PASSWORD=aiven2019testpass
+      - name=db
+    networks: 
+      - aiven_platform_default
+
+  zookeeper:
+    image: 'bitnami/zookeeper:3'
+    ports:
+      - '2181:2181'
+    volumes:
+      - './volume/zookeeper_data:/bitnami'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks: 
+      - aiven_platform_default
+  kafka:
+    image: 'bitnami/kafka:2'
+    ports:
+      - '9092:9092'
+      - '29092:29092'
+    volumes:
+      - './volume/kafka_data:/bitnami'
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+    depends_on:
+      - zookeeper
+    networks: 
+      - aiven_platform_default
+  
+
+networks:
+  aiven_platform_default:
+    name: aiven_platform_default
+    driver: bridge

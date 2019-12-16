@@ -1,0 +1,9 @@
+PGDB_HOST="pg-db"
+PGDB_DB="postgres"
+PGDB_USER="postgres"
+PGDB_PASSWORD="aiven2019testpass"
+PGDB_SSLMODE='disable'
+
+KAFKA_HOST=kafka
+KAFKA_PORT=9092
+KAFKA_TOPIC='test'
